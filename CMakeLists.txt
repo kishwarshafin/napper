@@ -40,6 +40,6 @@ TARGET_LINK_LIBRARIES(fasta_rle z)
 #-------------------
 # Test
 #-------------------
-# ENABLE_TESTING()
-# ADD_SUBDIRECTORY(modules/unit_tests)
+ ENABLE_TESTING()
+ ADD_SUBDIRECTORY(modules/unit_tests)
 
