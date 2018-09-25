@@ -3,6 +3,11 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 # name of the project is N.A.P.P.E.R (Nanopore Assembly Pre-processing Pipeline using Encoded Runlength)
 PROJECT(napper)
 
+if (UNIX)
+    set_property(TARGET tgt PROPERTY CXX_STANDARD 11)
+endif (UNIX)
+
+
 # FIND AND SET THE LIBRARY FILES
 SET(LIBRARY_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/modules/src/fastqreader.cpp
