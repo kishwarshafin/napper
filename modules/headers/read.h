@@ -27,6 +27,16 @@ typedef struct Compressed_Read{
 	}
 } Compressed_Read;
 
+
+typedef struct Compressed_Fasta_Read{
+	string compressed_seq;
+	vector<int> run_lengths;
+	Compressed_Fasta_Read(string _seq, vector<int> _run_lengths){
+		compressed_seq = _seq;
+		run_lengths = _run_lengths;
+	}
+} Compressed_Fasta_Read;
+
 class Read{
 public:
 	Read(string name, string seq, string strand, string quality, bool phred64=false);

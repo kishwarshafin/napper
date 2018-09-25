@@ -52,7 +52,7 @@ Compressed_Read* RunLength_Encoder(Read* uncompressed_read) {
         compressed_quality += char(current_quality / current_run_length_count);
     } else{
         long long uncompressed_read_iterator = 1;
-        long long current_run_length_count = 0;
+        long long current_run_length_count = 1;
         char previous_base = read_seq[0];
 
         // add the first base
@@ -80,4 +80,39 @@ Compressed_Read* RunLength_Encoder(Read* uncompressed_read) {
     }
 
     return new Compressed_Read(read_name, compressed_seq, compressed_quality, direction, run_length);
+}
+
+
+Compressed_Fasta_Read* RunLength_Encoder_Fasta(string sequence) {
+    string compressed_seq;
+    vector<int> run_length;
+
+    int uncompressed_read_iterator = 1;
+    int current_run_length_count = 1;
+    char previous_base = sequence[0];
+
+    // add the first base
+    compressed_seq += previous_base;
+
+    while(uncompressed_read_iterator < sequence.length()) {
+
+        char current_base = sequence[uncompressed_read_iterator];
+
+        if(current_base == previous_base) {
+            current_run_length_count += 1;
+        } else {
+            // add the next base and the run length of current base
+            compressed_seq += current_base;
+            run_length.push_back(current_run_length_count);
+
+            // reset the values
+            previous_base = current_base;
+            current_run_length_count = 1;
+        }
+        uncompressed_read_iterator += 1;
+    }
+    // add the run length of the last observed base
+    run_length.push_back(current_run_length_count);
+
+    return new Compressed_Fasta_Read(compressed_seq, run_length);
 }

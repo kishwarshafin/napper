@@ -31,4 +31,9 @@
 *.out
 *.app
 
+# ide specific files
+.DS_Store
+.idea*
 build/
+cmake-build-debug/
+output/*
