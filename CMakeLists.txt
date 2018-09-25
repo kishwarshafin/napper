@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.12.2)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.8)
 
 # name of the project is N.A.P.P.E.R (Nanopore Assembly Pre-processing Pipeline using Encoded Runlength)
 PROJECT(napper)
