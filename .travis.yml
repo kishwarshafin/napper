@@ -1,0 +1,19 @@
+language: cpp
+
+os:
+  - osx
+  - linux
+
+compiler:
+  - g++
+  - clang
+
+script: ./build.sh
+
+notifications:
+  email:
+    - kishwar.shafin@gmail.com
+
+env:
+  global:
+  - LANG="en_US.UTF-8"
