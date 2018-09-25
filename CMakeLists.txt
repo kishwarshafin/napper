@@ -1,11 +1,10 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.12.2)
 
 # name of the project is N.A.P.P.E.R (Nanopore Assembly Pre-processing Pipeline using Encoded Runlength)
 PROJECT(napper)
 
-if (UNIX)
-    set_property(TARGET tgt PROPERTY CXX_STANDARD 11)
-endif (UNIX)
+
+set(CXX_STANDARD 11)
 
 
 # FIND AND SET THE LIBRARY FILES
