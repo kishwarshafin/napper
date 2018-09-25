@@ -8,5 +8,6 @@
 #include "read.h"
 
 Compressed_Read* RunLength_Encoder(Read* uncompressed_read);
+Compressed_Fasta_Read* RunLength_Encoder_Fasta(string sequence);
 
 #endif //NAPPER_RUNLENGTH_ENCODER_H
