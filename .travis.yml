@@ -5,7 +5,7 @@ os:
   - linux
 
 compiler:
-  - g++
+  - gcc
   - clang
 
 script: ./build.sh
