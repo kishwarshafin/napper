@@ -50,23 +50,53 @@ void Writer::init(){
 	}
 }
 
-bool Writer::writeLine(string& linestr){
-	const char* line = linestr.c_str();
-	size_t size = linestr.length();
-	size_t written;
-	bool status;
-	if(mZipped){
-		written = gzwrite(mZipFile, line, size);
-		gzputc(mZipFile, '\n');
-		status = size == written;
-	}
-	else{
-		mOutStream->write(line, size);
-		mOutStream->put('\n');
-		status = !mOutStream->fail();
+
+bool Writer::writeLine_fasta(string& linestr){
+	vector<string> lines;
+	// split the line into smaller units like fasta standard
+	for (int i = 0; i < linestr.length(); i += 70) {
+		lines.push_back(linestr.substr(i, 70));
 	}
 
+    bool status;
+	for(int i=0; i<lines.size(); i++) {
+		if(lines[i].empty())
+			continue;
+
+		const char *line = lines[i].c_str();
+		size_t size = lines[i].length();
+		size_t written;
+
+		if (mZipped) {
+			written = gzwrite(mZipFile, line, size);
+			gzputc(mZipFile, '\n');
+			status = size == written;
+		} else {
+			mOutStream->write(line, size);
+			mOutStream->put('\n');
+			status = !mOutStream->fail();
+		}
+	}
 	return status;
+}
+
+
+bool Writer::writeLine(string& linestr){
+    bool status;
+    const char *line = linestr.c_str();
+    size_t size = linestr.length();
+    size_t written;
+
+    if (mZipped) {
+        written = gzwrite(mZipFile, line, size);
+        gzputc(mZipFile, '\n');
+        status = size == written;
+    } else {
+        mOutStream->write(line, size);
+        mOutStream->put('\n');
+        status = !mOutStream->fail();
+    }
+    return status;
 }
 
 bool Writer::writeString(string& str){

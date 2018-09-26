@@ -27,7 +27,7 @@ void run_length_fasta(string input_file_name, string output_file_name) {
             if(! entire_sequence.empty()) {
                 Compressed_Fasta_Read *compressed_read = RunLength_Encoder_Fasta(entire_sequence);
                 output_writer.writeLine(sequence_name);
-                output_writer.writeLine(compressed_read->compressed_seq);
+                output_writer.writeLine_fasta(compressed_read->compressed_seq);
 
                 output_writer_rle.writeLine(sequence_name);
                 string run_length_line;
