@@ -41,8 +41,10 @@ void run_length_fastq(string input_file_name, string output_file_name) {
                 }
             }
             output_writer_rle.writeLine(run_length_line);
-            read_count += 1;
+            delete compressed_read;
         }
+        delete read;
+        read_count += 1;
     }
 }
 
