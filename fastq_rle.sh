@@ -17,7 +17,7 @@ ENDTIME=$(date +%s)
 per_file_line=$((total_lines / total_threads))
 echo "PER FILE LINES: $per_file_line. TIME ELAPSED: $(($ENDTIME - $STARTTIME)) SECONDS."
 
-if (( $per_file_line % 4 != 0 ))           # no need for brackets
+if (( $per_file_line % 4 != 0 ))
 then
     echo "ERROR: Total number of line in a splitted file has to be divisible by 4"
     exit 1
@@ -56,5 +56,5 @@ mkdir $output_filename
 cat ./tmp_fastq_output/*.fq > $output_filename/output_fq.fq
 cat ./tmp_fastq_output/*.rl > $output_filename/output_fq.rl
 
-# rm -rf tmp_fastq_output/
-# rm -rf tmp_fastq/
+rm -rf tmp_fastq_output/
+rm -rf tmp_fastq/

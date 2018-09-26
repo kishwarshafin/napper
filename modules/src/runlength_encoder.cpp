@@ -98,7 +98,7 @@ Compressed_Fasta_Read* RunLength_Encoder_Fasta(string sequence) {
 
         char current_base = sequence[uncompressed_read_iterator];
 
-        if(current_base == previous_base) {
+        if(current_base == previous_base and current_base != 'N') {
             current_run_length_count += 1;
         } else {
             // add the next base and the run length of current base
