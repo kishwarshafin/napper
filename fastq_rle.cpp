@@ -18,7 +18,7 @@ void run_length_fastq(string input_file_name, string output_file_name) {
     long long read_count = 0;
     while(true) {
         Read* read = fastq_reader.read();
-        if(read_count % 10 == 0 and read_count > 0){
+        if(read_count % 10000 == 0 and read_count > 0){
             cerr<<read_count <<" READS PROCESSED." << endl;
         }
         if(read == nullptr) {
