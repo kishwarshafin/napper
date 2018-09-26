@@ -49,5 +49,5 @@ mkdir $output_filename
 cat ./tmp_fastq_output/*.fq > $output_filename/output_fq.fq
 cat ./tmp_fastq_output/*.rl > $output_filename/output_fq.rl
 
-rm -rf tmp_fastq_output/
-rm -rf tmp_fastq/
+# rm -rf tmp_fastq_output/
+# rm -rf tmp_fastq/
