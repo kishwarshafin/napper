@@ -15,9 +15,12 @@ void run_length_fastq(string input_file_name, string output_file_name) {
     FastqReader fastq_reader(input_file_name);
     Writer output_writer(output_file_name);
     Writer output_writer_rle(output_file_name+".rl");
-
+    long long read_count = 0;
     while(true) {
         Read* read = fastq_reader.read();
+        if(read_count % 10000 == 0 and read_count > 0){
+            cerr<<read_count <<" READS PROCESSED." << endl;
+        }
         if(read == nullptr) {
             break;
         } else {
@@ -38,7 +41,10 @@ void run_length_fastq(string input_file_name, string output_file_name) {
                 }
             }
             output_writer_rle.writeLine(run_length_line);
+            delete compressed_read;
         }
+        delete read;
+        read_count += 1;
     }
 }
 
