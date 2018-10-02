@@ -6,4 +6,4 @@ cd ${0%%$(basename $0)}
 mkdir build
 cd build
 
-cmake .. && make
+cmake .. && make && make test

@@ -38,7 +38,11 @@ protected:
     // Objects declared here can be used by all tests in the test case for Project1.
 };
 
-TEST_F(RunLengthEncodingTest, simplest_test)
+// ##############
+// # FASTQ RLE
+// ##############
+
+TEST_F(RunLengthEncodingTest, FASTQ_RLE_TEST_SIMPLE)
 {
     Read* read = new Read("AA:BB:CC", "ACTG", "+", "AAEE");
     Compressed_Read* compressed_read = RunLength_Encoder(read);
@@ -53,7 +57,7 @@ TEST_F(RunLengthEncodingTest, simplest_test)
     EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
 }
 
-TEST_F(RunLengthEncodingTest, no_read_name_test)
+TEST_F(RunLengthEncodingTest, FASTQ_RLE_TEST_NO_READ_NAME)
 {
     Read* read = new Read("", "ACTG", "+", "AAEE");
     Compressed_Read* compressed_read = RunLength_Encoder(read);
@@ -68,7 +72,7 @@ TEST_F(RunLengthEncodingTest, no_read_name_test)
     EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
 }
 
-TEST_F(RunLengthEncodingTest, same_base_compression)
+TEST_F(RunLengthEncodingTest, FASTQ_RLE_TEST_ONE_BASE)
 {
     Read* read = new Read("ABCD", "AAAA", "-", "BBEE");
     Compressed_Read* compressed_read = RunLength_Encoder(read);
@@ -95,8 +99,7 @@ TEST_F(RunLengthEncodingTest, same_base_compression)
     EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
 }
 
-
-TEST_F(RunLengthEncodingTest, easy_compression)
+TEST_F(RunLengthEncodingTest, FASTQ_RLE_TEST_MIX)
 {
     Read* read = new Read("ABCD", "ACCGGTTA", "-", "ABBEE]]/");
     Compressed_Read* compressed_read = RunLength_Encoder(read);
@@ -124,5 +127,97 @@ TEST_F(RunLengthEncodingTest, easy_compression)
     EXPECT_EQ(compressed_read->compressed_seq, expected_compressed_sequence);
     EXPECT_EQ(compressed_read->strand_direction, expected_strand);
     EXPECT_EQ(compressed_read->compressed_quality, expected_compressed_quality);
+    EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
+}
+
+// ##############
+// # FASTA RLE
+// ##############
+TEST_F(RunLengthEncodingTest, FASTA_RLE_simple)
+{
+    string fasta_sequence = "AAAAA";
+
+    Compressed_Fasta_Read *compressed_read = RunLength_Encoder_Fasta(fasta_sequence);
+
+    // compressed sequence
+    string expected_compressed_sequence = "A";
+
+    //run_length
+    int run_length_values[] = {5};
+    vector<int> expected_rle (run_length_values, run_length_values+1);
+
+    EXPECT_EQ(compressed_read->compressed_seq, expected_compressed_sequence);
+    EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
+}
+
+
+TEST_F(RunLengthEncodingTest, FASTA_RLE_LEADING_NS)
+{
+    string fasta_sequence = "NNNNAAAAA";
+
+    Compressed_Fasta_Read *compressed_read = RunLength_Encoder_Fasta(fasta_sequence);
+
+    // compressed sequence
+    string expected_compressed_sequence = "NNNNA";
+
+    //run_length
+    int run_length_values[] = {1, 1, 1, 1, 5};
+    vector<int> expected_rle (run_length_values, run_length_values+5);
+
+    EXPECT_EQ(compressed_read->compressed_seq, expected_compressed_sequence);
+    EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
+}
+
+
+TEST_F(RunLengthEncodingTest, FASTA_RLE_TRAILING_NS)
+{
+    string fasta_sequence = "ACCTTTGGNNNN";
+
+    Compressed_Fasta_Read *compressed_read = RunLength_Encoder_Fasta(fasta_sequence);
+
+    // compressed sequence
+    string expected_compressed_sequence = "ACTGNNNN";
+
+    //run_length
+    int run_length_values[] = {1, 2, 3, 2, 1, 1, 1, 1};
+    vector<int> expected_rle (run_length_values, run_length_values+expected_compressed_sequence.length());
+
+    EXPECT_EQ(compressed_read->compressed_seq, expected_compressed_sequence);
+    EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
+}
+
+
+TEST_F(RunLengthEncodingTest, FASTA_RLE_MIXED_NS)
+{
+    string fasta_sequence = "NNNNACCTTNNTGGNNNN";
+
+    Compressed_Fasta_Read *compressed_read = RunLength_Encoder_Fasta(fasta_sequence);
+
+    // compressed sequence
+    string expected_compressed_sequence = "NNNNACTNNTGNNNN";
+
+    //run_length
+    int run_length_values[] = {1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1};
+    vector<int> expected_rle (run_length_values, run_length_values+expected_compressed_sequence.length());
+
+    EXPECT_EQ(compressed_read->compressed_seq, expected_compressed_sequence);
+    EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
+}
+
+
+TEST_F(RunLengthEncodingTest, FASTA_RLE_NO_NS)
+{
+    string fasta_sequence = "AACCTTGGGACTTTTGGGAA";
+
+    Compressed_Fasta_Read *compressed_read = RunLength_Encoder_Fasta(fasta_sequence);
+
+    // compressed sequence
+    string expected_compressed_sequence = "ACTGACTGA";
+
+    //run_length
+    int run_length_values[] = {2, 2, 2, 3, 1, 1, 4, 3, 2};
+    vector<int> expected_rle (run_length_values, run_length_values+expected_compressed_sequence.length());
+
+    EXPECT_EQ(compressed_read->compressed_seq, expected_compressed_sequence);
     EXPECT_THAT(compressed_read->run_lengths, ::testing::ContainerEq(expected_rle));
 }

@@ -24,10 +24,10 @@ void run_length_fasta(string input_file_name, string output_file_name) {
         string line = fasta_reader.read();
         if(line.empty() || line[0] == '>') {
             //dump previous sequence
-            if(! entire_sequence.empty()){
+            if(! entire_sequence.empty()) {
                 Compressed_Fasta_Read *compressed_read = RunLength_Encoder_Fasta(entire_sequence);
                 output_writer.writeLine(sequence_name);
-                output_writer.writeLine(compressed_read->compressed_seq);
+                output_writer.writeLine_fasta(compressed_read->compressed_seq);
 
                 output_writer_rle.writeLine(sequence_name);
                 string run_length_line;
@@ -40,10 +40,15 @@ void run_length_fasta(string input_file_name, string output_file_name) {
                     }
                 }
                 output_writer_rle.writeLine(run_length_line);
+                cerr<<"FINISHED PROCESSING: "<<sequence_name<<endl;
+                delete compressed_read;
             }
             // re initalize the strings
             sequence_name = line;
             entire_sequence = "";
+            if(! line.empty())
+                cerr<<"STARTING TO PROCESS: "<<sequence_name<<endl;
+
         }
 
         if(line.empty()){
